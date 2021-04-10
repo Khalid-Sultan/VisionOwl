@@ -22,16 +22,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:text="School \nEducation"
-                    style="@style/viewParent.headerText"
-                    android:layout_gravity="bottom"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/hero"
-                    android:adjustViewBounds="true" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
