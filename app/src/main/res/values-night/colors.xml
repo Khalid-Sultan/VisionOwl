@@ -8,6 +8,9 @@
     <color name="contentStatusBar">#000</color>
     <color name="ripple">#376DF6</color>
 
+    <color name="dialog_transparent_black_background">#80000000</color>
+    <color name="whiteCardColor">#fff</color>
+    <color name="blackTextColor">#000</color>
 
 
 </resources>

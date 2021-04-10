@@ -11,4 +11,5 @@
     <dimen name="card_margin">5dp</dimen>
     <dimen name="frutorial_title">15sp</dimen>
 
+    <dimen name="contentTextSize">16dp</dimen>
 </resources>

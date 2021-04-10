@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(){
         setSupportActionBar(toolbar)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation)
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        //
+
         val layoutParams = bottomNavigationView.layoutParams as CoordinatorLayout.LayoutParams
         layoutParams.behavior = BottomNavigationBehavior()
         bottomNavigationView.selectedItemId = R.id.navigationHome
@@ -113,10 +113,6 @@ class MainActivity : AppCompatActivity(){
             intent.type = "image/*"
             intent.action = Intent.ACTION_PICK
             startActivityForResult(Intent.createChooser(intent, null), pickImage)
-        }
-        //handling floating action menu
-        findViewById<View>(R.id.floatingActionButton).setOnClickListener {
-            (findViewById<View>(R.id.drawer_layout) as DrawerLayout).openDrawer(GravityCompat.START)
         }
         findViewById<View>(R.id.iv_capture).setOnClickListener {
             takePhoto()
@@ -264,6 +260,9 @@ class MainActivity : AppCompatActivity(){
     toggle.syncState()
     val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
     navigationView.setNavigationItemSelectedListener(this)
+    findViewById<View>(R.id.floatingActionButton).setOnClickListener {
+        (findViewById<View>(R.id.drawer_layout) as DrawerLayout).openDrawer(GravityCompat.START)
+    }
 
     override fun onBackPressed() {
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
