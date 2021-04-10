@@ -22,6 +22,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -37,9 +38,10 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(){
     var pickImage = 100
     var classifier: Classifier? = null
 
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private var lastImageTaken: Uri? = null
+
 
     private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -80,9 +83,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setDarkMode(window)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = this.resources.getColor(R.color.contentStatusBar)
+        }
         setContentView(R.layout.activity_main)
 
         if (!allPermissionsGranted()) {
@@ -92,14 +99,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        val toggle = ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
-        val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
-        navigationView.setNavigationItemSelectedListener(this)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation)
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         //
@@ -122,28 +121,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         findViewById<View>(R.id.iv_capture).setOnClickListener {
             takePhoto()
         }
+        outputDirectory = getOutputDirectory()
+        cameraExecutor = Executors.newSingleThreadExecutor()
 
-        val iv = findViewById<PreviewView>(R.id.viewFinder)
-        val scaleDown: ObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(
-            iv,
-            PropertyValuesHolder.ofFloat("scaleX", 1.2f),
-            PropertyValuesHolder.ofFloat("scaleY", 1.2f)
-        )
-        scaleDown.duration = 310
-        scaleDown.repeatCount = ObjectAnimator.INFINITE
-        scaleDown.repeatMode = ObjectAnimator.REVERSE
-        scaleDown.interpolator = FastOutSlowInInterpolator()
-        scaleDown.start()
-
-    }
-
-    override fun onBackPressed() {
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
     }
 
     private fun takePhoto() {
@@ -163,8 +143,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-//                    findViewById<CircularImageView>(R.id.iv_capture).visibility = View.VISIBLE
-//                    findViewById<CircularImageView>(R.id.iv_capture).setImageURI(savedUri)
                     val msg = "Photo capture succeeded: $savedUri"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_LONG).show()
                     Log.d(TAG, msg)
@@ -226,44 +204,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_share -> {
-            }
-            R.id.nav_dark_mode -> {
-                val darkModePrefManager = DarkModePrefManager(this)
-                darkModePrefManager.setDarkMode(!darkModePrefManager.isNightMode)
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                recreate()
-            }
-        }
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        drawer.closeDrawer(GravityCompat.START)
-        return true
-    }
 
-    private fun setDarkMode(window: Window) {
-        if (DarkModePrefManager(this).isNightMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            changeStatusBar(MODE_DARK, window)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            changeStatusBar(MODE_LIGHT, window)
-        }
-    }
-
-    private fun changeStatusBar(mode: Int, window: Window) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = this.resources.getColor(R.color.contentStatusBar)
-            //Light mode
-            if (mode == MODE_LIGHT) {
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            }
-        }
-    }
-
-    //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data)
 //        if (requestCode == pickImage && resultCode == RESULT_OK) {
 //            val resultView = Intent(this, ResultsWindow::class.java)
@@ -309,3 +251,64 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
     }
 }
+
+/*
+//Code Sections that are unnecessary at the moment. Like Navigation Drawer and a few others
+// For navigation drawer extend this to the class NavigationView.OnNavigationItemSelectedListener
+//For on Create()
+    val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+    val toggle = ActionBarDrawerToggle(
+        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+    )
+    drawer.addDrawerListener(toggle)
+    toggle.syncState()
+    val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
+    navigationView.setNavigationItemSelectedListener(this)
+
+    override fun onBackPressed() {
+        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_share -> {
+            }
+            R.id.nav_dark_mode -> {
+                val darkModePrefManager = DarkModePrefManager(this)
+                darkModePrefManager.setDarkMode(!darkModePrefManager.isNightMode)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                recreate()
+            }
+        }
+        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        drawer.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    private fun setDarkMode(window: Window) {
+        if (DarkModePrefManager(this).isNightMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            changeStatusBar(MODE_DARK, window)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            changeStatusBar(MODE_LIGHT, window)
+        }
+    }
+
+    private fun changeStatusBar(mode: Int, window: Window) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = this.resources.getColor(R.color.contentStatusBar)
+            //Light mode
+            if (mode == MODE_LIGHT) {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            }
+        }
+    }
+
+
+ */

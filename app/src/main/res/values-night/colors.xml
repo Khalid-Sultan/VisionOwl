@@ -6,6 +6,7 @@
     <color name="bottomNavigationBackground">#000</color>
     <color name="miniTitleColor">#fff</color>
     <color name="contentStatusBar">#000</color>
+    <color name="ripple">#376DF6</color>
 
 
 

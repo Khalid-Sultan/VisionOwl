@@ -37,4 +37,8 @@
     <color name="cardColorYellow">#FF991F</color>
     <color name="cardColorViolet">#8F51E3</color>
     <color name="cardColorRed">#F94172</color>
+
+
+    <color name="ripple">#376DF6</color>
+
 </resources>

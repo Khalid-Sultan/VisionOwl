@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-    <item>
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_dark_mode"
-                android:icon="@android:drawable/ic_menu_day"
-                android:title="Toggle Theme" />
-        </menu>
-    </item>
+<!--    <item>-->
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/nav_share"-->
+<!--                android:icon="@drawable/ic_menu_share"-->
+<!--                android:title="Share" />-->
+<!--            <item-->
+<!--                android:id="@+id/nav_dark_mode"-->
+<!--                android:icon="@android:drawable/ic_menu_day"-->
+<!--                android:title="Toggle Theme" />-->
+<!--        </menu>-->
+<!--    </item>-->
 
 </menu>
