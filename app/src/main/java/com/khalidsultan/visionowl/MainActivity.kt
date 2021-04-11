@@ -25,7 +25,6 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -39,7 +38,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
     var pickImage = 100
     var classifier: Classifier? = null
 
@@ -182,10 +181,10 @@ class MainActivity : AppCompatActivity(){
             mediaDir else filesDir
     }
 
-    private fun generateResults(bitmap: Bitmap){
+    private fun generateResults(bitmap: Bitmap) {
         val percentage = classifier!!.predict(bitmap)
         var prediction = Constants.PT_CLASSES[1]
-        if (percentage<0.5){
+        if (percentage < 0.5) {
             prediction = Constants.PT_CLASSES[0]
         }
 
@@ -196,27 +195,16 @@ class MainActivity : AppCompatActivity(){
         dialog.findViewById<ImageView>(R.id.result_image).setImageBitmap(bitmap)
         dialog.findViewById<TextView>(R.id.prediction).text = prediction
         dialog.findViewById<TextView>(R.id.percentages).text = percentage.toString()
-        dialog.findViewById<Button>(R.id.closeButton).setOnClickListener{
+        dialog.findViewById<Button>(R.id.closeButton).setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        return true
-    }
 
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
 
@@ -246,6 +234,7 @@ class MainActivity : AppCompatActivity(){
             }
         }
     }
+
     companion object {
         private const val MODE_DARK = 0
         private const val MODE_LIGHT = 1
@@ -260,67 +249,3 @@ class MainActivity : AppCompatActivity(){
         )
     }
 }
-
-/*
-//Code Sections that are unnecessary at the moment. Like Navigation Drawer and a few others
-// For navigation drawer extend this to the class NavigationView.OnNavigationItemSelectedListener
-//For on Create()
-    val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-    val toggle = ActionBarDrawerToggle(
-        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-    )
-    drawer.addDrawerListener(toggle)
-    toggle.syncState()
-    val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
-    navigationView.setNavigationItemSelectedListener(this)
-    findViewById<View>(R.id.floatingActionButton).setOnClickListener {
-        (findViewById<View>(R.id.drawer_layout) as DrawerLayout).openDrawer(GravityCompat.START)
-    }
-
-    override fun onBackPressed() {
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_share -> {
-            }
-            R.id.nav_dark_mode -> {
-                val darkModePrefManager = DarkModePrefManager(this)
-                darkModePrefManager.setDarkMode(!darkModePrefManager.isNightMode)
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                recreate()
-            }
-        }
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        drawer.closeDrawer(GravityCompat.START)
-        return true
-    }
-
-    private fun setDarkMode(window: Window) {
-        if (DarkModePrefManager(this).isNightMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            changeStatusBar(MODE_DARK, window)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            changeStatusBar(MODE_LIGHT, window)
-        }
-    }
-
-    private fun changeStatusBar(mode: Int, window: Window) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = this.resources.getColor(R.color.contentStatusBar)
-            //Light mode
-            if (mode == MODE_LIGHT) {
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            }
-        }
-    }
-
-
- */
