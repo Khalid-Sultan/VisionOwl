@@ -1,11 +1,10 @@
-package com.khalidsultan.cataracts
+package com.khalidsultan.visionowl
 
 import android.graphics.Bitmap
 import org.pytorch.Tensor
 import org.pytorch.torchvision.TensorImageUtils
 import org.pytorch.IValue
 import org.pytorch.Module
-import android.util.Log
 
 class Classifier(modelPath: String?) {
     var model: Module = Module.load(modelPath)
@@ -21,15 +20,15 @@ class Classifier(modelPath: String?) {
         return TensorImageUtils.bitmapToFloat32Tensor(bmp, mean, std)
     }
 
-    fun predict(bitmap: Bitmap?): String {
+    fun predict(bitmap: Bitmap?): Float {
         val tensor = pre_process(bitmap, 224)
         val inputs = IValue.from(tensor)
         val outputs = model.forward(inputs).toTensor()
         val scores = outputs.dataAsFloatArray
-        if (scores.size!=1 || scores[0]<0.5){
-            return Constants.PT_CLASSES[0]
+        if (scores.size!=1){
+            return 0f
         }
-        return Constants.PT_CLASSES[1]
+        return String.format("%.3f", scores[0]).toFloat()
     }
 
 }

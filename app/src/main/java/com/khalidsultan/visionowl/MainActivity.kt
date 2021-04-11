@@ -1,20 +1,23 @@
 package com.khalidsultan.visionowl
 
 import android.Manifest
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -22,17 +25,12 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
-import com.khalidsultan.cataracts.Classifier
+import com.khalidsultan.cataracts.Constants
 import com.khalidsultan.cataracts.Utils
 import java.io.File
 import java.text.SimpleDateFormat
@@ -102,8 +100,8 @@ class MainActivity : AppCompatActivity(){
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation)
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        val layoutParams = bottomNavigationView.layoutParams as CoordinatorLayout.LayoutParams
-        layoutParams.behavior = BottomNavigationBehavior()
+//        val layoutParams = bottomNavigationView.layoutParams as CoordinatorLayout.LayoutParams
+//        layoutParams.behavior = BottomNavigationBehavior()
         bottomNavigationView.selectedItemId = R.id.navigationHome
 
         val modelPath = Utils.assetFilePath(this, "model.pt")
@@ -146,6 +144,7 @@ class MainActivity : AppCompatActivity(){
                     mediaScanIntent.data = savedUri
                     sendBroadcast(mediaScanIntent)
                     lastImageTaken = savedUri
+                    generateResults(BitmapFactory.decodeFile(savedUri.path))
                 }
             })
     }
@@ -183,6 +182,26 @@ class MainActivity : AppCompatActivity(){
             mediaDir else filesDir
     }
 
+    private fun generateResults(bitmap: Bitmap){
+        val percentage = classifier!!.predict(bitmap)
+        var prediction = Constants.PT_CLASSES[1]
+        if (percentage<0.5){
+            prediction = Constants.PT_CLASSES[0]
+        }
+
+        val dialog = Dialog(this, R.style.df_dialog)
+        dialog.setContentView(R.layout.results_dialog)
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.findViewById<ImageView>(R.id.result_image).setImageBitmap(bitmap)
+        dialog.findViewById<TextView>(R.id.prediction).text = prediction
+        dialog.findViewById<TextView>(R.id.percentages).text = percentage.toString()
+        dialog.findViewById<Button>(R.id.closeButton).setOnClickListener{
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return true
@@ -201,38 +220,32 @@ class MainActivity : AppCompatActivity(){
     }
 
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == pickImage && resultCode == RESULT_OK) {
-//            val resultView = Intent(this, ResultsWindow::class.java)
-//
-//            if (data != null && data.data != null) {
-//                val uri = data.data!!
-//                val inputStream = this.contentResolver.openInputStream(uri)
-//                val cursor = this.contentResolver.query(uri, null, null, null, null)
-//                cursor?.use { c ->
-//                    val nameIndex = c.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-//                    if (c.moveToFirst()) {
-//                        val name = c.getString(nameIndex)
-//                        inputStream?.let { inputStream ->
-//                            // create same file with same name
-//                            val file = File(this.cacheDir, name)
-//                            val os = file.outputStream()
-//                            os.use {
-//                                inputStream.copyTo(it)
-//                            }
-//                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-//                            val prediction = classifier!!.predict(bitmap)
-//                            resultView.putExtra("image_data", data.data.toString())
-//                            resultView.putExtra("prediction", prediction)
-//                            resultView.putExtra("type", 1)
-//                            startActivity(resultView)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == pickImage && resultCode == RESULT_OK) {
+            if (data != null && data.data != null) {
+                val uri = data.data!!
+                val inputStream = this.contentResolver.openInputStream(uri)
+                val cursor = this.contentResolver.query(uri, null, null, null, null)
+                cursor?.use { c ->
+                    val nameIndex = c.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    if (c.moveToFirst()) {
+                        val name = c.getString(nameIndex)
+                        inputStream?.let { inputStream ->
+                            // create same file with same name
+                            val file = File(this.cacheDir, name)
+                            val os = file.outputStream()
+                            os.use {
+                                inputStream.copyTo(it)
+                            }
+                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                            generateResults(bitmap)
+                        }
+                    }
+                }
+            }
+        }
+    }
     companion object {
         private const val MODE_DARK = 0
         private const val MODE_LIGHT = 1

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dialogParent"
     style="@style/dialog_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
@@ -21,13 +21,15 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
+                android:id="@+id/result_image"
                 android:src="@drawable/ic_launcher_foreground" />
 
             <TextView
                 style="@style/predictionHeading"
+                android:id="@+id/prediction"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:text="Unknown"
@@ -41,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="0%"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:textStyle="normal" />
 
             <Button
