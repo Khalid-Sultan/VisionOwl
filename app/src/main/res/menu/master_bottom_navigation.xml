@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigationMyCourses"
+        android:id="@+id/navigationHowItWorks"
         android:icon="@drawable/ic_effort"
         android:title="How This Works" />
 
@@ -12,7 +12,7 @@
         android:title="Home" />
 
     <item
-        android:id="@+id/navigationMyProfile"
+        android:id="@+id/navigationCreator"
         android:icon="@drawable/ic_user"
         android:title="About Us" />
 

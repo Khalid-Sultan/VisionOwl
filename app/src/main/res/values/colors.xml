@@ -22,7 +22,7 @@
 
     <!--gradient colors-->
     <color name="gradientOrange">#FF416C</color>
-    <color name="gradientViolet">#8A52E9</color>
+    <color name="gradientDark">#141573</color>
     <color name="gradientLightYellow">#FFA72F</color>
     <color name="gradientLightOrange">#FF641A</color>
     <color name="gradientLightYellow2">#FFC92B</color>

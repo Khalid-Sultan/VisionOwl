@@ -51,12 +51,14 @@
         android:baselineAligned="false"
         android:layout_marginBottom="10dp"
         android:layout_weight="1.5"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
+            android:layout_weight="5"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
@@ -72,18 +74,26 @@
                     android:layout_height="match_parent"
                     android:minHeight="60dp"
                     android:padding="10dp"
-                    gl:end_color="@color/primaryTextColor"
+                    gl:end_color="@color/gradientLightBlue"
                     gl:orientation="LEFT_RIGHT"
-                    gl:start_color="@color/gradientLightBlue">
+                    gl:start_color="@color/gradientDark">
 
                     <ImageView
                         style="@style/homeCardImage"
-                        android:maxHeight="50dp"
-                        android:src="@drawable/ic_undraw_camera_re_cnp4_1_" />
+                        android:maxHeight="60dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_baseline_camera_24" />
 
                     <TextView
                         android:id="@+id/textViewSub3Title"
                         style="@style/viewParent.headerText.HomeCardTitle"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/economica_bold"
+                        android:textSize="28sp"
                         android:text="Capture" />
 
 
@@ -93,12 +103,10 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
+            android:layout_weight="5"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:orientation="vertical">
-
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,19 +120,27 @@
                     android:layout_height="match_parent"
                     android:minHeight="60dp"
                     android:padding="10dp"
-                    gl:end_color="@color/gradientOrange"
+                    gl:end_color="@color/gradientDark"
                     gl:orientation="LEFT_RIGHT"
-                    gl:start_color="@color/gradientLightYellow">
+                    gl:start_color="@color/gradientLightBlue">
 
                     <ImageView
                         style="@style/homeCardImage"
-                        android:maxHeight="50dp"
-                        android:src="@drawable/ic_undraw_moments_0y20" />
-
+                        android:maxHeight="60dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_baseline_folder_open_24" />
                     <TextView
                         android:id="@+id/textViewSub2Title"
                         style="@style/viewParent.headerText.HomeCardTitle"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/economica_bold"
+                        android:textSize="28sp"
                         android:text="Browse" />
+
 
                 </net.colindodd.gradientlayout.GradientRelativeLayout>
             </androidx.cardview.widget.CardView>

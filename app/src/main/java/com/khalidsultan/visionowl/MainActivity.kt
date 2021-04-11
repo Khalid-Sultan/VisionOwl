@@ -50,10 +50,35 @@ class MainActivity : AppCompatActivity() {
 
     private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
-            var fragment: Fragment
             when (item.itemId) {
-                R.id.navigationMyProfile -> return@OnNavigationItemSelectedListener true
-                R.id.navigationMyCourses -> return@OnNavigationItemSelectedListener true
+                R.id.navigationHowItWorks -> {
+                    val dialog = Dialog(this, R.style.df_dialog)
+                    dialog.setContentView(R.layout.results_dialog)
+                    dialog.setCancelable(true)
+                    dialog.setCanceledOnTouchOutside(true)
+                    dialog.findViewById<ImageView>(R.id.result_image).setImageDrawable(resources.getDrawable(R.drawable.ic_undraw_artificial_intelligence_re_enpp))
+                    dialog.findViewById<TextView>(R.id.prediction).text = "How it works"
+                    dialog.findViewById<TextView>(R.id.percentages).text = "Pay up then"
+                    dialog.findViewById<Button>(R.id.closeButton).setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+
+                }
+                R.id.navigationCreator -> {
+                    val dialog = Dialog(this, R.style.df_dialog)
+                    dialog.setContentView(R.layout.results_dialog)
+                    dialog.setCancelable(true)
+                    dialog.setCanceledOnTouchOutside(true)
+                    dialog.findViewById<ImageView>(R.id.result_image).setImageDrawable(resources.getDrawable(R.drawable.ic_undraw_animating_1rgh))
+                    dialog.findViewById<TextView>(R.id.prediction).text = "About Us"
+                    dialog.findViewById<TextView>(R.id.percentages).text = "It's just me sadly"
+                    dialog.findViewById<Button>(R.id.closeButton).setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+
+                }
                 R.id.navigationHome -> return@OnNavigationItemSelectedListener true
             }
             false
