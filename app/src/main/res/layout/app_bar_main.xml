@@ -33,23 +33,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <include
-        layout="@layout/content_main" />
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/emptyView">-->
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--            android:id="@+id/floatingActionButton"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_margin="10dp"-->
-<!--            android:clickable="true"-->
-<!--            app:layout_anchor="@+id/emptyView"-->
-<!--            app:layout_anchorGravity="start|top"-->
-<!--            app:srcCompat="@drawable/menu"-->
-<!--            android:scaleType="center"-->
-<!--            android:focusable="true"-->
-<!--            android:contentDescription="TODO" />-->
-<!--    </LinearLayout>-->
+        layout="@layout/content_main"
+        android:layout_margin="0dp"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

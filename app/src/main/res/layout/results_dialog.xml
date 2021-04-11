@@ -3,28 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dialogParent"
     style="@style/dialog_layout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="360dp"
+    android:layout_height="500dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:elevation="10dp"
         android:foregroundGravity="center"
-        app:cardBackgroundColor="@color/whiteCardColor"
+        app:cardBackgroundColor="@color/whiteBodyColor"
         app:cardCornerRadius="16dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="200dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6.5"
                 android:layout_gravity="center"
                 android:id="@+id/result_image"
+                android:fitsSystemWindows="true"
+                android:adjustViewBounds="true"
                 android:src="@drawable/ic_launcher_foreground" />
 
             <TextView
@@ -32,27 +35,36 @@
                 android:id="@+id/prediction"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
+                android:layout_weight="1.5"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:text="Unknown"
+                android:textAlignment="center"
                 android:textColor="@color/blackTextColor"
-                android:textSize="@dimen/headerTextSize" />
+                android:fontFamily="@font/economica_bold"
+                android:textSize="42sp" />
 
             <TextView
                 android:id="@+id/percentages"
                 style="@style/precentageText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_gravity="center"
+                android:textAlignment="center"
                 android:text="0%"
-                android:textSize="14sp"
+                android:textSize="16sp"
+                android:textColor="@color/blackTextColor"
                 android:textStyle="normal" />
 
             <Button
                 android:id="@+id/closeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight = "1"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/close_button"
+                android:background="@color/blackTextColor"
                 android:text="Close"
                 android:textColor="@color/whiteTextColor" />
         </LinearLayout>

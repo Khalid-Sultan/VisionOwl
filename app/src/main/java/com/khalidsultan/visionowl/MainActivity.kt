@@ -19,10 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
@@ -36,6 +33,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -46,7 +44,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private var lastImageTaken: Uri? = null
-
+    private var camera: Camera? = null
+    private var flashStatus = false
 
     private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -124,8 +123,6 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation)
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-//        val layoutParams = bottomNavigationView.layoutParams as CoordinatorLayout.LayoutParams
-//        layoutParams.behavior = BottomNavigationBehavior()
         bottomNavigationView.selectedItemId = R.id.navigationHome
 
         val modelPath = Utils.assetFilePath(this, "model.pt")
@@ -139,9 +136,28 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.iv_capture).setOnClickListener {
             takePhoto()
         }
+        findViewById<View>(R.id.flash).setOnClickListener{
+            camera?.cameraControl?.enableTorch(!flashStatus)
+            flashStatus = !flashStatus
+        }
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
-
+        findViewById<PreviewView>(R.id.viewFinder).afterMeasured {
+            val autoFocusPoint = SurfaceOrientedMeteringPointFactory(1f, 1f)
+                .createPoint(.5f, .5f)
+            try {
+                val autoFocusAction = FocusMeteringAction.Builder(
+                    autoFocusPoint,
+                    FocusMeteringAction.FLAG_AF
+                ).apply {
+                    //start auto-focusing after 2 seconds
+                    setAutoCancelDuration(2, TimeUnit.SECONDS)
+                }.build()
+                camera?.cameraControl?.startFocusAndMetering(autoFocusAction)
+            } catch (e: CameraInfoUnavailableException) {
+                Log.d("ERROR", "cannot access camera", e)
+            }
+        }
     }
 
     private fun takePhoto() {
@@ -184,12 +200,13 @@ class MainActivity : AppCompatActivity() {
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             try {
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
+                camera = cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture
                 )
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
+
 
         }, ContextCompat.getMainExecutor(this))
     }
@@ -259,7 +276,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
+    inline fun View.afterMeasured(crossinline block: () -> Unit) {
+        viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                if (measuredWidth > 0 && measuredHeight > 0) {
+                    viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    block()
+                }
+            }
+        })
+    }
     companion object {
         private const val MODE_DARK = 0
         private const val MODE_LIGHT = 1

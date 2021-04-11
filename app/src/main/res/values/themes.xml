@@ -60,9 +60,9 @@
     </style>
 
     <style name="viewParent.headerText.HomeCardTitle">
-        <item name="android:paddingTop">10dp</item>
+<!--        <item name="android:paddingTop">10dp</item>-->
         <item name="android:textColor">@color/whiteTextColor</item>
-        <item name="android:layout_alignParentTop">true</item>
+<!--        <item name="android:layout_alignParentTop">true</item>-->
     </style>
 
     <style name="DarkModeHidden">

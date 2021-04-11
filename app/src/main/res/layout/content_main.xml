@@ -7,6 +7,8 @@
     tools:context="com.khalidsultan.visionowl.MainActivity"
     tools:showIn="@layout/app_bar_main"
     style="@style/parent.contentLayout"
+    android:paddingBottom="0dp"
+    android:layout_marginBottom="0dp"
     android:background="#00000000"
     android:orientation="vertical">
 
@@ -14,23 +16,32 @@
         android:id="@+id/main_title_bar"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:layout_height="0dp">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:src="@drawable/m" />
+            android:src="@drawable/banner" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/main_content_bar"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_weight="6.5"
+        android:layout_weight="6"
         android:layout_height="0dp">
-
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="20dp"
+            android:elevation="10dp"
+            android:id="@+id/flash"
+            android:src="@drawable/ic_baseline_flash_on_24" />
         <androidx.cardview.widget.CardView
             android:id="@+id/holdingCard"
             android:layout_width="match_parent"
@@ -43,14 +54,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </androidx.cardview.widget.CardView>
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:baselineAligned="false"
         android:layout_marginBottom="10dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:layout_height="0dp"
         android:orientation="horizontal">
 
@@ -63,7 +74,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 app:cardCornerRadius="15dp"
                 app:cardPreventCornerOverlap="true">
@@ -72,26 +83,25 @@
                     android:id="@+id/iv_capture"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:minHeight="60dp"
-                    android:padding="10dp"
-                    gl:end_color="@color/gradientLightBlue"
-                    gl:orientation="LEFT_RIGHT"
-                    gl:start_color="@color/gradientDark">
+                    android:paddingHorizontal="10dp"
+                    gl:end_color="@color/cardColorRed"
+                    gl:orientation="TOP_BOTTOM"
+                    gl:start_color="@color/blackTextColor">
 
                     <ImageView
                         style="@style/homeCardImage"
-                        android:maxHeight="60dp"
+                        android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_baseline_camera_24" />
+                        android:src="@drawable/capture"/>
 
                     <TextView
                         android:id="@+id/textViewSub3Title"
                         style="@style/viewParent.headerText.HomeCardTitle"
                         android:layout_alignParentStart="true"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
                         android:fontFamily="@font/economica_bold"
                         android:textSize="28sp"
                         android:text="Capture" />
@@ -109,7 +119,7 @@
             android:orientation="vertical">
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 app:cardCornerRadius="15dp"
                 app:cardPreventCornerOverlap="true">
@@ -118,25 +128,24 @@
                     android:id="@+id/browse"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:minHeight="60dp"
-                    android:padding="10dp"
-                    gl:end_color="@color/gradientDark"
-                    gl:orientation="LEFT_RIGHT"
-                    gl:start_color="@color/gradientLightBlue">
+                    android:paddingHorizontal="10dp"
+                    gl:end_color="@color/ripple"
+                    gl:orientation="TOP_BOTTOM"
+                    gl:start_color="@color/blackTextColor">
 
                     <ImageView
                         style="@style/homeCardImage"
-                        android:maxHeight="60dp"
+                        android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_baseline_folder_open_24" />
+                        android:src="@drawable/open" />
                     <TextView
                         android:id="@+id/textViewSub2Title"
                         style="@style/viewParent.headerText.HomeCardTitle"
                         android:layout_alignParentEnd="true"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
                         android:fontFamily="@font/economica_bold"
                         android:textSize="28sp"
                         android:text="Browse" />
@@ -154,6 +163,7 @@
         android:foreground="?attr/selectableItemBackground"
         app:menu="@menu/master_bottom_navigation"
         app:labelVisibilityMode="labeled"
+        app:itemRippleColor="@color/gradientLightBlue"
         app:itemIconTint="@color/bottomNavigationTintColor"
         app:itemTextColor="@color/bottomNavigationTextColor"
         android:layout_weight="1"
